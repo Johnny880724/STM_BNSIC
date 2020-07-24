@@ -87,10 +87,12 @@ class inputconfig:
         L2_rel_dif_extpl = L2Dif_extpl / np.sqrt(np.mean((self.theory_)**2))
         print("num grid " + str(self.num_grid_dr) + ": L2 extpl error " ,L2_rel_dif_extpl)
 
-    def plot2d_error(self):
-        mhf3d.plot2d_compare_zero(self.result, self.theory_, self.frame_full)
+    def plot2d_error(self, outName):
         
-    def plot1d_error(self, plot):
+        fig, ax = mhf3d.plot2d_compare_zero(self.result, self.theory_, self.frame_full)
+        fig.savefig(outName)
+        
+    def plot1d_error(self, plot, outName):
         fig, ax = plot
         N_half = int(0.5*self.N_grid)
         rel_err = np.abs(((self.result - self.theory_)*self.frame_full)) / (np.abs(self.theory_) + mhf.singular_null)
@@ -99,18 +101,19 @@ class inputconfig:
         y_axis = np.delete(rel_err[N_half,:],[N_half,N_half+1])
         ax.plot(x_axis,y_axis)
         ax.set_title("relative error along the x axis")
+        fig.savefig(outName)
         
 
 
 if(__name__ == "__main__"):
     test_inputconfig = inputconfig()
-    test_inputconfig.test(True,True)
+    # test_inputconfig.test(True,True)
     Phi_result, it = stm.stm_coef_Neumann(test_inputconfig)
     
     fig = plt.figure()
     ax = fig.gca()
-    test_inputconfig.plot1d_error((fig,ax))
-    test_inputconfig.plot2d_error()
+    test_inputconfig.plot1d_error((fig,ax),"error1d.png")
+    test_inputconfig.plot2d_error("error2d.png")
     
 
 

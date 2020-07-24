@@ -364,16 +364,18 @@ def plot2d_compare(mat1, mat2, *arg):
             if(len(arg) > 2):
                 ax[i,j].set_xlabel(arg[2][0])
                 ax[i,j].set_ylabel(arg[2][1])
-#    plt.matshow(frame_small)
+    return fig, ax
                 
 def plot2d_compare_zero(mat1, mat2, *arg):
+    
     frame = np.ones_like(mat1)
     if(arg):
         frame = arg[0]
         
     mat1_zero = mat1 - frame * np.sum(mat1*frame) / np.sum(frame)
     mat2_zero = mat2 - frame * np.sum(mat2*frame) / np.sum(frame)
-    plot2d_compare(mat1_zero, mat2_zero, frame)
+    ret = plot2d_compare(mat1_zero, mat2_zero, frame)
+    return ret
     
     
 if(__name__ == "__main__"):
